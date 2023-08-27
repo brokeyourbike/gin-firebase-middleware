@@ -1,4 +1,4 @@
-package ginfirebasemiddleware
+package ginfirebasemw
 
 import (
 	"bytes"
