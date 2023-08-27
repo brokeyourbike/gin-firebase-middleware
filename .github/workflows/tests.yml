@@ -1,0 +1,29 @@
+name: tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v4
+      with:
+        go-version-file: 'go.mod'
+    - run: go build -v ./...
+    - run: go test -race -covermode=atomic -coverprofile=coverage.out -v ./...
+
+    - uses: paambaati/codeclimate-action@v4
+      continue-on-error: true
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
+      with:
+        prefix: 'github.com/brokeyourbike/gin-firebase-middleware'
+        coverageLocations: ./coverage.out:gocov
