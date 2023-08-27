@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.2.0...v0.3.0) (2023-08-27)
+
+
+### Features
+
+* service accoun t ([b77430d](https://www.github.com/brokeyourbike/gin-firebase-middleware/commit/b77430d815bccb12f590b28926bf750999433775))
+
 ## [0.2.0](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.1.0...v0.2.0) (2023-08-27)
 
 
