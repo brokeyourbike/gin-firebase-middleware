@@ -1,6 +1,8 @@
 package ginfirebasemw_test
 
 import (
+	_ "embed"
+	"encoding/base64"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -11,6 +13,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+//go:embed testdata/second-factor-phone.json
+var secondFactorPhone []byte
+
 func TestMain(m *testing.M) {
 	gin.SetMode(gin.ReleaseMode)
 	os.Exit(m.Run())
@@ -18,24 +23,45 @@ func TestMain(m *testing.M) {
 
 func TestMiddleware(t *testing.T) {
 	tests := []struct {
-		name       string
-		headers    map[string]string
-		wantStatus int
+		name        string
+		headers     map[string]string
+		wantStatus  int
+		assertInCtx gin.HandlerFunc
 	}{
 		{
 			"missing header",
 			map[string]string{},
 			http.StatusForbidden,
+			func(ctx *gin.Context) { ctx.Status(http.StatusOK) },
 		},
 		{
 			"header is not base64 encoded",
 			map[string]string{"X-Apigateway-Api-Userinfo": "not-base64-encoded"},
 			http.StatusForbidden,
+			func(ctx *gin.Context) { ctx.Status(http.StatusOK) },
 		},
 		{
 			"encoded value is not json",
 			map[string]string{"X-Apigateway-Api-Userinfo": "SSBhbSBub3QgSlNPTg=="}, // I am not JSON
 			http.StatusForbidden,
+			func(ctx *gin.Context) { ctx.Status(http.StatusOK) },
+		},
+		{
+			"second-factor-phone",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(secondFactorPhone)},
+			http.StatusOK,
+			func(ctx *gin.Context) {
+				info := ginfirebasemw.GetUserInfo(ctx)
+				assert.Equal(t, "83ffc78a-6457-4103-9912-ac070fbb6151", info.Sub)
+				assert.Equal(t, "john@doe.com", info.Email)
+				assert.Equal(t, ginfirebasemw.SecondFactorPhone, info.Firebase.SignInSecondFactor)
+				assert.Equal(t, ginfirebasemw.ProviderPassword, info.Firebase.SignInProvider)
+
+				id := ginfirebasemw.GetUserID(ctx)
+				assert.Equal(t, "83ffc78a-6457-4103-9912-ac070fbb6151", id)
+
+				ctx.Status(http.StatusOK)
+			},
 		},
 	}
 
@@ -52,15 +78,7 @@ func TestMiddleware(t *testing.T) {
 			w := httptest.NewRecorder()
 			router := gin.New()
 			router.Use(ginfirebasemw.Middleware())
-			router.GET("/", func(ctx *gin.Context) {
-				info := ginfirebasemw.GetUserInfo(ctx)
-				assert.Equal(t, "c2133353-6547-4429-a453-4c8fa2fdbacd", info.Sub)
-
-				id := ginfirebasemw.GetUserID(ctx)
-				assert.Equal(t, "c2133353-6547-4429-a453-4c8fa2fdbacd", id)
-
-				ctx.String(http.StatusOK, "the end.")
-			})
+			router.GET("/", test.assertInCtx)
 			router.ServeHTTP(w, req)
 
 			assert.Equal(t, test.wantStatus, w.Code)

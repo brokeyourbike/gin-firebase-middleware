@@ -1,0 +1,22 @@
+{
+    "name": "john Doe",
+    "iss": "https://securetoken.google.com/example-corp",
+    "aud": "example-corp",
+    "auth_time": 1693097095,
+    "user_id": "83ffc78a-6457-4103-9912-ac070fbb6151",
+    "sub": "83ffc78a-6457-4103-9912-ac070fbb6151",
+    "iat": 1693155819,
+    "exp": 1693159419,
+    "email": "john@doe.com",
+    "email_verified": true,
+    "firebase": {
+        "identities": {
+            "email": [
+                "john@doe.com"
+            ]
+        },
+        "sign_in_provider": "password",
+        "sign_in_second_factor": "phone",
+        "second_factor_identifier": "6d528457-0293-40d8-b424-e5c5df2e4000"
+    }
+}

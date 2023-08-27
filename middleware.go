@@ -16,9 +16,18 @@ const gatewayUserInfoHeader = "X-Apigateway-Api-Userinfo"
 // userInfoCtx is a context key for the UserInfo.
 const userInfoCtx = "FirebaseApiGatewayUserInfo"
 
+const ProviderPassword = "password"
+const SecondFactorPhone = "phone"
+
 type UserInfo struct {
-	Sub   string `json:"sub" binding:"required"`
-	Email string `json:"email" binding:"required,email"`
+	Name          string `json:"name"`
+	Sub           string `json:"sub" binding:"required"`
+	Email         string `json:"email" binding:"required,email"`
+	EmailVerified bool   `json:"email_verified" binding:"required"`
+	Firebase      struct {
+		SignInProvider     string `json:"sign_in_provider"`
+		SignInSecondFactor string `json:"sign_in_second_factor"`
+	} `json:"firebase" binding:"required"`
 }
 
 func Middleware() gin.HandlerFunc {
