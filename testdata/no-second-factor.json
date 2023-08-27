@@ -1,0 +1,20 @@
+{
+    "name": "John Doe",
+    "iss": "https://securetoken.google.com/example-corp",
+    "aud": "example-corp",
+    "auth_time": 1693160332,
+    "user_id": "83ffc78a-6457-4103-9912-ac070fbb6151",
+    "sub": "83ffc78a-6457-4103-9912-ac070fbb6151",
+    "iat": 1693160332,
+    "exp": 1693163932,
+    "email": "john@doe.com",
+    "email_verified": true,
+    "firebase": {
+        "identities": {
+            "email": [
+                "john@doe.com"
+            ]
+        },
+        "sign_in_provider": "password"
+    }
+}

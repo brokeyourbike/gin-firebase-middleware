@@ -13,6 +13,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+//go:embed testdata/no-required-fields.json
+var noRequiredFields []byte
+
+//go:embed testdata/no-second-factor.json
+var noSecondFactor []byte
+
 //go:embed testdata/second-factor-phone.json
 var secondFactorPhone []byte
 
@@ -42,12 +48,34 @@ func TestMiddleware(t *testing.T) {
 		},
 		{
 			"encoded value is not json",
-			map[string]string{"X-Apigateway-Api-Userinfo": "SSBhbSBub3QgSlNPTg=="}, // I am not JSON
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString([]byte("I am not JSON"))},
 			http.StatusForbidden,
 			func(ctx *gin.Context) { ctx.Status(http.StatusOK) },
 		},
 		{
-			"second-factor-phone",
+			"json does not contain required fields",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(noRequiredFields)},
+			http.StatusForbidden,
+			func(ctx *gin.Context) { ctx.Status(http.StatusOK) },
+		},
+		{
+			"no second factor",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(noSecondFactor)},
+			http.StatusOK,
+			func(ctx *gin.Context) {
+				info := ginfirebasemw.GetUserInfo(ctx)
+				assert.Equal(t, "83ffc78a-6457-4103-9912-ac070fbb6151", info.Sub)
+				assert.Equal(t, "john@doe.com", info.Email)
+				assert.Equal(t, ginfirebasemw.ProviderPassword, info.Firebase.SignInProvider)
+
+				id := ginfirebasemw.GetUserID(ctx)
+				assert.Equal(t, "83ffc78a-6457-4103-9912-ac070fbb6151", id)
+
+				ctx.Status(http.StatusOK)
+			},
+		},
+		{
+			"second factor phone",
 			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(secondFactorPhone)},
 			http.StatusOK,
 			func(ctx *gin.Context) {
