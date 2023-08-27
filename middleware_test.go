@@ -22,6 +22,9 @@ var noSecondFactor []byte
 //go:embed testdata/second-factor-phone.json
 var secondFactorPhone []byte
 
+//go:embed testdata/service-account.json
+var serviceAccount []byte
+
 func TestMain(m *testing.M) {
 	gin.SetMode(gin.ReleaseMode)
 	os.Exit(m.Run())
@@ -87,6 +90,23 @@ func TestMiddleware(t *testing.T) {
 
 				id := ginfirebasemw.GetUserID(ctx)
 				assert.Equal(t, "83ffc78a-6457-4103-9912-ac070fbb6151", id)
+
+				ctx.Status(http.StatusOK)
+			},
+		},
+		{
+			"service account",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(serviceAccount)},
+			http.StatusOK,
+			func(ctx *gin.Context) {
+				info := ginfirebasemw.GetUserInfo(ctx)
+				assert.Equal(t, "ab0b166e-c725-4921-b919-fd1cbf43a442", info.Sub)
+				assert.Equal(t, "john@example.iam.gserviceaccount.com", info.Email)
+				assert.Equal(t, "", info.Firebase.SignInSecondFactor)
+				assert.Equal(t, "", info.Firebase.SignInProvider)
+
+				id := ginfirebasemw.GetUserID(ctx)
+				assert.Equal(t, "ab0b166e-c725-4921-b919-fd1cbf43a442", id)
 
 				ctx.Status(http.StatusOK)
 			},

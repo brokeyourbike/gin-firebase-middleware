@@ -20,14 +20,14 @@ const ProviderPassword = "password"
 const SecondFactorPhone = "phone"
 
 type UserInfo struct {
-	Name          string `json:"name"`
+	Name          string `json:"name,omitempty"`
 	Sub           string `json:"sub" binding:"required"`
 	Email         string `json:"email" binding:"required,email"`
-	EmailVerified bool   `json:"email_verified" binding:"required"`
+	EmailVerified bool   `json:"email_verified,omitempty"`
 	Firebase      struct {
-		SignInProvider     string `json:"sign_in_provider"`
-		SignInSecondFactor string `json:"sign_in_second_factor"`
-	} `json:"firebase" binding:"required"`
+		SignInProvider     string `json:"sign_in_provider,omitempty"`
+		SignInSecondFactor string `json:"sign_in_second_factor,omitempty"`
+	} `json:"firebase,omitempty"`
 }
 
 func Middleware() gin.HandlerFunc {
