@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -28,6 +29,10 @@ type UserInfo struct {
 		SignInProvider     string `json:"sign_in_provider,omitempty"`
 		SignInSecondFactor string `json:"sign_in_second_factor,omitempty"`
 	} `json:"firebase,omitempty"`
+}
+
+func (u UserInfo) IsServiceAccount() bool {
+	return strings.HasSuffix(u.Email, "gserviceaccount.com")
 }
 
 func Middleware() gin.HandlerFunc {
