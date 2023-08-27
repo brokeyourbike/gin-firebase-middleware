@@ -70,6 +70,7 @@ func TestMiddleware(t *testing.T) {
 				assert.Equal(t, "83ffc78a-6457-4103-9912-ac070fbb6151", info.Sub)
 				assert.Equal(t, "john@doe.com", info.Email)
 				assert.Equal(t, ginfirebasemw.ProviderPassword, info.Firebase.SignInProvider)
+				assert.False(t, info.EmailVerified)
 				assert.False(t, info.IsServiceAccount())
 
 				id := ginfirebasemw.GetUserID(ctx)
@@ -88,6 +89,7 @@ func TestMiddleware(t *testing.T) {
 				assert.Equal(t, "john@doe.com", info.Email)
 				assert.Equal(t, ginfirebasemw.SecondFactorPhone, info.Firebase.SignInSecondFactor)
 				assert.Equal(t, ginfirebasemw.ProviderPassword, info.Firebase.SignInProvider)
+				assert.True(t, info.EmailVerified)
 				assert.False(t, info.IsServiceAccount())
 
 				id := ginfirebasemw.GetUserID(ctx)
@@ -106,6 +108,7 @@ func TestMiddleware(t *testing.T) {
 				assert.Equal(t, "john@example.iam.gserviceaccount.com", info.Email)
 				assert.Equal(t, "", info.Firebase.SignInSecondFactor)
 				assert.Equal(t, "", info.Firebase.SignInProvider)
+				assert.False(t, info.EmailVerified)
 				assert.True(t, info.IsServiceAccount())
 
 				id := ginfirebasemw.GetUserID(ctx)
