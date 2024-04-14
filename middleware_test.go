@@ -19,6 +19,9 @@ var noRequiredFields []byte
 //go:embed testdata/no-second-factor.json
 var noSecondFactor []byte
 
+//go:embed testdata/apple-sign-in.json
+var appleSignInNoEmail []byte
+
 //go:embed testdata/second-factor-phone.json
 var secondFactorPhone []byte
 
@@ -60,6 +63,24 @@ func TestMiddleware(t *testing.T) {
 			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(noRequiredFields)},
 			http.StatusForbidden,
 			func(ctx *gin.Context) { ctx.Status(http.StatusOK) },
+		},
+		{
+			"apple signin, no email",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(appleSignInNoEmail)},
+			http.StatusOK,
+			func(ctx *gin.Context) {
+				info := ginfirebasemw.GetUserInfo(ctx)
+				assert.Equal(t, "apple-123", info.Sub)
+				assert.Empty(t, info.Email)
+				assert.Equal(t, ginfirebasemw.ProviderApple, info.Firebase.SignInProvider)
+				assert.False(t, info.EmailVerified)
+				assert.False(t, info.IsServiceAccount())
+
+				id := ginfirebasemw.GetUserID(ctx)
+				assert.Equal(t, "apple-123", id)
+
+				ctx.Status(http.StatusOK)
+			},
 		},
 		{
 			"no second factor",

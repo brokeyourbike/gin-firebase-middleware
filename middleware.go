@@ -18,17 +18,18 @@ const gatewayUserInfoHeader = "X-Apigateway-Api-Userinfo"
 const userInfoCtx = "FirebaseApiGatewayUserInfo"
 
 const ProviderPassword = "password"
+const ProviderApple = "apple.com"
 const SecondFactorPhone = "phone"
 
 type UserInfo struct {
-	Name          string `json:"name,omitempty"`
+	Name          string `json:"name"`
 	Sub           string `json:"sub" binding:"required"`
-	Email         string `json:"email" binding:"required,email"`
-	EmailVerified bool   `json:"email_verified,omitempty"`
+	Email         string `json:"email" binding:"omitempty,email"`
+	EmailVerified bool   `json:"email_verified"`
 	Firebase      struct {
-		SignInProvider     string `json:"sign_in_provider,omitempty"`
-		SignInSecondFactor string `json:"sign_in_second_factor,omitempty"`
-	} `json:"firebase,omitempty"`
+		SignInProvider     string `json:"sign_in_provider"`
+		SignInSecondFactor string `json:"sign_in_second_factor"`
+	} `json:"firebase"`
 }
 
 func (u UserInfo) IsServiceAccount() bool {

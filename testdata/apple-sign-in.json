@@ -1,0 +1,17 @@
+{
+    "iss": "https://securetoken.google.com/example-corp",
+    "aud": "example-corp",
+    "auth_time": 1713094827,
+    "user_id": "apple-123",
+    "sub": "apple-123",
+    "iat": 1713094827,
+    "exp": 1713098427,
+    "firebase": {
+        "identities": {
+            "apple.com": [
+                "abc.123456789.908"
+            ]
+        },
+        "sign_in_provider": "apple.com"
+    }
+}
