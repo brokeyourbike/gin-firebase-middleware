@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.3.0...v0.4.0) (2024-04-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* allow to have empty email
+
+### Bug Fixes
+
+* allow to have empty email ([fbcb034](https://www.github.com/brokeyourbike/gin-firebase-middleware/commit/fbcb0349f6aa6c04d614f37f0dcfe969d1cf6884))
+
 ## [0.3.0](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.2.0...v0.3.0) (2023-08-27)
 
 
