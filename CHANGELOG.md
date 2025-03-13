@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.4.1](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.4.0...v0.4.1) (2025-03-13)
+
+
+### Bug Fixes
+
+* deps ([9500ca2](https://www.github.com/brokeyourbike/gin-firebase-middleware/commit/9500ca249f6d94a97bc635d256191f8d45328f48))
+
 ## [0.4.0](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.3.0...v0.4.0) (2024-04-14)
 
 
