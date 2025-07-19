@@ -19,5 +19,5 @@ jobs:
           go-version-file: 'go.mod'
       - uses: dominikh/staticcheck-action@v1
         with:
-          version: '2023.1.1'
+          version: '2025.1.1'
           install-go: false
