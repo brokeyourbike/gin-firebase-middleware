@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/go
 {
 	"name": "gin-firebase-middleware",
-	"image": "mcr.microsoft.com/devcontainers/go:1.23",
+	"image": "mcr.microsoft.com/devcontainers/go:1.24",
 	"features": {
 		"ghcr.io/brokeyourbike/devcontainer-features/staticcheck:0": {}
 	}
