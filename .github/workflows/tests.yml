@@ -20,10 +20,8 @@ jobs:
     - run: go build -v ./...
     - run: go test -race -covermode=atomic -coverprofile=coverage.out -v ./...
 
-    - uses: paambaati/codeclimate-action@v4
+    - uses: qltysh/qlty-action/coverage@v1
       continue-on-error: true
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
       with:
-        prefix: 'github.com/brokeyourbike/gin-firebase-middleware'
-        coverageLocations: ./coverage.out:gocov
+        token: {{ secrets.QLTY_COVERAGE_TOKEN }}
+        files: coverage.out
