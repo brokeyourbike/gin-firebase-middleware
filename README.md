@@ -2,8 +2,8 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/brokeyourbike/gin-firebase-middleware.svg)](https://pkg.go.dev/github.com/brokeyourbike/gin-firebase-middleware)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brokeyourbike/gin-firebase-middleware)](https://goreportcard.com/report/github.com/brokeyourbike/gin-firebase-middleware)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a83ce526eca9ba911697/maintainability)](https://codeclimate.com/github/brokeyourbike/gin-firebase-middleware/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a83ce526eca9ba911697/test_coverage)](https://codeclimate.com/github/brokeyourbike/gin-firebase-middleware/test_coverage)
+[![Maintainability](https://qlty.sh/gh/brokeyourbike/projects/gin-firebase-middleware/maintainability.svg)](https://qlty.sh/gh/brokeyourbike/projects/gin-firebase-middleware)
+[![Code Coverage](https://qlty.sh/gh/brokeyourbike/projects/gin-firebase-middleware/coverage.svg)](https://qlty.sh/gh/brokeyourbike/projects/gin-firebase-middleware)
 
 Assess firebase user info in context
 
