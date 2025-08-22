@@ -1,0 +1,17 @@
+{
+    "aud": [
+        "example.com"
+    ],
+    "client_id": "48537239-692a-4df8-b413-05c0aadd614f",
+    "exp": 1755840510,
+    "ext": {},
+    "iat": 1755839610,
+    "iss": "https://example.com/",
+    "jti": "ee1d862b-ced2-4107-bb44-124b680e3c44",
+    "nbf": 1755839610,
+    "scp": [
+        "read",
+        "write"
+    ],
+    "sub": "48537239-692a-4df8-b413-05c0aadd614f"
+}

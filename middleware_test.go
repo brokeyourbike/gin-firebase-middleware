@@ -28,6 +28,9 @@ var secondFactorPhone []byte
 //go:embed testdata/service-account.json
 var serviceAccount []byte
 
+//go:embed testdata/hydra.json
+var hydra []byte
+
 func TestMain(m *testing.M) {
 	gin.SetMode(gin.ReleaseMode)
 	os.Exit(m.Run())
@@ -134,6 +137,25 @@ func TestMiddleware(t *testing.T) {
 
 				id := ginfirebasemw.GetUserID(ctx)
 				assert.Equal(t, "ab0b166e-c725-4921-b919-fd1cbf43a442", id)
+
+				ctx.Status(http.StatusOK)
+			},
+		},
+		{
+			"hydra",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(hydra)},
+			http.StatusOK,
+			func(ctx *gin.Context) {
+				info := ginfirebasemw.GetUserInfo(ctx)
+				assert.Equal(t, "48537239-692a-4df8-b413-05c0aadd614f", info.Sub)
+				assert.Equal(t, "", info.Email)
+				assert.Equal(t, "", info.Firebase.SignInSecondFactor)
+				assert.Equal(t, "", info.Firebase.SignInProvider)
+				assert.False(t, info.EmailVerified)
+				assert.False(t, info.IsServiceAccount())
+
+				id := ginfirebasemw.GetUserID(ctx)
+				assert.Equal(t, "48537239-692a-4df8-b413-05c0aadd614f", id)
 
 				ctx.Status(http.StatusOK)
 			},
