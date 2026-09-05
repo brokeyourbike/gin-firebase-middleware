@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.4.2...v0.5.0) (2026-09-05)
+
+
+### Features
+
+* permissions ([03cccd6](https://www.github.com/brokeyourbike/gin-firebase-middleware/commit/03cccd660602f8e8c45c33be5a270263a83c9d17))
+
 ### [0.4.2](https://www.github.com/brokeyourbike/gin-firebase-middleware/compare/v0.4.1...v0.4.2) (2025-07-19)
 
 
