@@ -1,0 +1,8 @@
+{
+  "sub": "admin-123",
+  "name": "Super Admin",
+  "permissions": [
+    "admin:admin:view",
+    "admin:admin:manage"
+  ]
+}

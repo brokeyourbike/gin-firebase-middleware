@@ -31,6 +31,9 @@ var serviceAccount []byte
 //go:embed testdata/hydra.json
 var hydra []byte
 
+//go:embed testdata/admin-permissions.json
+var adminPermissions []byte
+
 func TestMain(m *testing.M) {
 	gin.SetMode(gin.ReleaseMode)
 	os.Exit(m.Run())
@@ -156,6 +159,32 @@ func TestMiddleware(t *testing.T) {
 
 				id := ginfirebasemw.GetUserID(ctx)
 				assert.Equal(t, "48537239-692a-4df8-b413-05c0aadd614f", id)
+
+				ctx.Status(http.StatusOK)
+			},
+		},
+		{
+			"admin with permissions",
+			map[string]string{"X-Apigateway-Api-Userinfo": base64.RawURLEncoding.EncodeToString(adminPermissions)},
+			http.StatusOK,
+			func(ctx *gin.Context) {
+				info := ginfirebasemw.GetUserInfo(ctx)
+				assert.Equal(t, "admin-123", info.Sub)
+				assert.Equal(t, "Super Admin", info.Name)
+				assert.Equal(t, []string{"admin:admin:view", "admin:admin:manage"}, info.Permissions)
+				assert.True(t, info.HasPermission("admin:admin:view"))
+				assert.False(t, info.HasPermission("admin:other:perm"))
+				assert.True(t, info.HasPermissions("admin:admin:view"))
+				assert.True(t, info.HasPermissions("admin:admin:view", "admin:admin:manage"))
+				assert.False(t, info.HasPermissions("admin:other:perm"))
+				assert.True(t, info.HasAnyPermission("admin:admin:view", "admin:other:perm"))
+				assert.False(t, info.HasAnyPermission("admin:other:perm", "admin:another:perm"))
+
+				perms := ginfirebasemw.GetPermissions(ctx)
+				assert.Equal(t, []string{"admin:admin:view", "admin:admin:manage"}, perms)
+
+				id := ginfirebasemw.GetUserID(ctx)
+				assert.Equal(t, "admin-123", id)
 
 				ctx.Status(http.StatusOK)
 			},

@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -22,10 +23,11 @@ const ProviderApple = "apple.com"
 const SecondFactorPhone = "phone"
 
 type UserInfo struct {
-	Name          string `json:"name"`
-	Sub           string `json:"sub" binding:"required"`
-	Email         string `json:"email" binding:"omitempty,email"`
-	EmailVerified bool   `json:"email_verified"`
+	Name          string   `json:"name"`
+	Sub           string   `json:"sub" binding:"required"`
+	Email         string   `json:"email" binding:"omitempty,email"`
+	EmailVerified bool     `json:"email_verified"`
+	Permissions   []string `json:"permissions"`
 	Firebase      struct {
 		SignInProvider     string `json:"sign_in_provider"`
 		SignInSecondFactor string `json:"sign_in_second_factor"`
@@ -34,6 +36,28 @@ type UserInfo struct {
 
 func (u UserInfo) IsServiceAccount() bool {
 	return strings.HasSuffix(u.Email, "gserviceaccount.com")
+}
+
+func (u UserInfo) HasPermission(permission string) bool {
+	return slices.Contains(u.Permissions, permission)
+}
+
+func (u UserInfo) HasPermissions(permissions ...string) bool {
+	for _, p := range permissions {
+		if !slices.Contains(u.Permissions, p) {
+			return false
+		}
+	}
+	return true
+}
+
+func (u UserInfo) HasAnyPermission(permissions ...string) bool {
+	for _, p := range permissions {
+		if slices.Contains(u.Permissions, p) {
+			return true
+		}
+	}
+	return false
 }
 
 func Middleware() gin.HandlerFunc {
@@ -77,4 +101,10 @@ func GetUserInfo(ctx *gin.Context) UserInfo {
 func GetUserID(ctx *gin.Context) string {
 	userInfo := GetUserInfo(ctx)
 	return userInfo.Sub
+}
+
+// GetPermissions returns the permissions from the context.
+func GetPermissions(ctx *gin.Context) []string {
+	userInfo := GetUserInfo(ctx)
+	return userInfo.Permissions
 }
